@@ -565,13 +565,14 @@ def get_obj_array(file_path):
     Parameters
     ----------
     file_path: str
-        full path of the recon file. It check if it is frtom ptypy or ptyREX
+        full path of the recon file. It check if it is from ptypy or ptyREX
+        if input is json it checks to see if there is a similarly named hdf 
+        file in the same folder
 
     Returns
     -------
     data_arr: np.array
         complex object numpy array 
-TODO: if input is json check if there is a similarly named hdf file in the same folder
     """
     if os.path.splitext(file_path)[1] == '.ptyr':
         f = h5py.File(file_path,'r')
@@ -584,6 +585,13 @@ TODO: if input is json check if there is a similarly named hdf file in the same 
         f = h5py.File(file_path,'r')
         data = f['entry_1']['process_1']['output_1']['object'][0]
         data_arr = np.squeeze(data)
+    elif os.path.splitext(file_path)[1] == '.json':
+        if os.path.exists(os.path.splitext(file_path)[0] + '.hdf'):
+            return get_obj_array(os.path.splitext(file_path)[0] + '.hdf')
+        else:
+            print(file_path + ' does not exist.')
+            return
+
     return data_arr
 
 # the following functions could be replaced by get_obj_array and get_probe_array
