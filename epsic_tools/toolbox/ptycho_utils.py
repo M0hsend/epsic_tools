@@ -160,14 +160,14 @@ def get_fft(obj_arr, crop = None, apply_hann = False):
         obj_arr = hann_2d * obj_arr
         
     if crop is None:
-        obj_fft = abs(np.fft.fftshift(np.fft.fft2(obj_arr)))
+        obj_fft = np.fft.fftshift(np.fft.fft2(obj_arr))
         
     else:
         sh = obj_arr.shape[0]
         to_crop = crop * sh / 2
         obj_crop = obj_arr[int(sh / 2 - to_crop):int(to_crop + sh / 2),\
                    int(sh / 2 - to_crop):int(to_crop + sh / 2)]
-        obj_fft = abs(np.fft.fftshift(np.fft.fft2(obj_crop)))
+        obj_fft = np.fft.fftshift(np.fft.fft2(obj_crop))
         
     return obj_fft
 
